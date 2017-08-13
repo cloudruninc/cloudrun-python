@@ -4,8 +4,5 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  - "3.6-dev"
-  - "3.7-dev"
-  - "nightly"
 install: "pip install -U -r requirements.txt"
-script: python -m pytest
+script: pytest cloudrun/tests.py
