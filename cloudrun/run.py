@@ -5,6 +5,6 @@ run.py
 class Run(object):
     """Class to handle all model run metadata 
     and provide access to model output."""
-    def __init__(self):
+    def __init__(self,id):
         """Run constructor."""
-        pass
+        self.id = id
