@@ -1,7 +1,7 @@
 import pytest
 import uuid
-from cloudrun import Cloudrun
-from cloudrun.run import Run
+from .cloudrun import Cloudrun
+from .run import Run
 
 token = uuid.uuid4().hex
 id = uuid.uuid4().hex
