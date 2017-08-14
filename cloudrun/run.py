@@ -1,12 +1,18 @@
 """
 run.py
 """
+import requests
+
+API_BASE_URL = 'https://api.cloudrun.co'
+API_VERSION = 'v1'
+API_URL = API_BASE_URL+'/'+API_VERSION
 
 class Run(object):
     """Class to handle all model run metadata 
     and provide access to model output."""
-    def __init__(self,id):
+    def __init__(self,token,id):
         """Run constructor."""
+        self.token = token
         self.id = id
 
     def create(self,model,version):
@@ -29,6 +35,6 @@ class Run(object):
         """Starts the run."""
         pass
 
-    def start(self):
+    def stop(self):
         """Stops the run."""
         pass

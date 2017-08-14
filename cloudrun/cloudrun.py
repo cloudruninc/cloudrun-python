@@ -11,8 +11,7 @@ class Cloudrun(object):
 
     def get_run(self,id):
         """Returns an instance of model run by id."""
-        run = Run(id)
-        run.token = self.token
+        run = Run(self.token,id)
         return run
 
     def get_all_runs(self):
