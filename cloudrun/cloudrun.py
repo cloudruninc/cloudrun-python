@@ -18,4 +18,6 @@ class Cloudrun(object):
     def get_all_runs(self):
         """Returns a a list of all model runs that are 
         accessible or owned by user."""
+        # TODO get list of all IDs that belong to user
+        # TODO fetch each run by ID.
         pass
