@@ -11,11 +11,12 @@ API_URL = API_BASE_URL+'/'+API_VERSION
 class Run(object):
     """Class to handle all model run metadata 
     and provide access to model output."""
-    def __init__(self,token,id):
+    def __init__(self,token,id=None):
         """Run constructor."""
         self.token = token
-        self.id = id
-        self.get()
+        if id:
+            self.id = id
+            self.get()
 
     def create(self,model,version):
         """Create a model run."""
