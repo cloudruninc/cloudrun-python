@@ -22,7 +22,7 @@ from cloudrun import Cloudrun
 api = Cloudrun(token)
 
 # create the model run instance
-run = api.create_run()
+run = api.create_run(model='wrf',version='3.9')
 
 # upload input files
 for input file in ['namelist.input','wrfinput_d01','wrfbdy_d01']:
