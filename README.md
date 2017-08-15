@@ -5,15 +5,13 @@
 
 Python interface to [Cloudrun API](http://docs.cloudrun.co).
 
-## Getting started
-
-To install, type:
+## Installation
 
 ```
 pip install git+https://github.com/cloudruninc/cloudrun-python
 ```
 
-Example usage:
+## Example usage
 
 ```python
 from cloudrun import Cloudrun
@@ -28,12 +26,14 @@ run = api.create_run(model='wrf',version='3.9')
 for input file in ['namelist.input','wrfinput_d01','wrfbdy_d01']:
     run.upload(input_file)
 
-# start the run
-run.setup()
+# start the run on 32 cores
+run.start(cores=32)
 
 # update run data
 run.get()
 ```
+
+[Contact us](accounts@cloudrun.co) to obtain an API token.
 
 ## Documentation
 
