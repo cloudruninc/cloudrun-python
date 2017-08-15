@@ -44,7 +44,21 @@ class Run(object):
 
     def upload(self,filename=None,url=None):
         """Upload a local or remote file."""
-        pass
+
+        if filename and url:
+            raise ValueError('Ambiguous call, both filename and url provided')
+
+        if not filename or url:
+            raise ValueError('Missing keyword argument, either filename or url required')
+
+        headers = {'Authorization':'Bearer '+self.token}
+            
+
+    def setup(self):
+        """Set up the run Returns compute options."""
+        headers = {'Authorization':'Bearer '+self.token}
+        url = API_URL+'/wrf/'+self.id+'/setup'
+        r = requests.post(url,headers=headers)
 
     def start(self):
         """Starts the run."""
@@ -53,7 +67,9 @@ class Run(object):
 
     def stop(self):
         """Stops the run."""
-        self.url = API_URL+'/wrf/'+self.id+'/stop'
+        headers = {'Authorization':'Bearer '+self.token}
+        url = API_URL+'/wrf/'+self.id+'/stop'
+        r = requests.post(url,headers=headers)
 
     def _update(self,response):
         """Updates Run attributes from response dict."""
