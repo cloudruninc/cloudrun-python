@@ -1,4 +1,3 @@
-import pytest
 import uuid
 from .cloudrun import Cloudrun
 from .run import Run
