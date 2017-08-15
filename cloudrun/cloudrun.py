@@ -9,10 +9,15 @@ class Cloudrun(object):
         """Cloudrun constructor."""
         self.token = token
 
+    def create_run(self,model,version):
+        """Creates a new Run instance."""
+        run = Run(token)
+        run.create(model,version)
+        return run
+
     def get_run(self,id):
         """Returns an instance of model run by id."""
-        run = Run(self.token,id)
-        return run
+        return Run(self.token,id)
 
     def get_all_runs(self):
         """Returns a a list of all model runs that are 
