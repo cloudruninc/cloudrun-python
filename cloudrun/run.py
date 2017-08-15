@@ -27,7 +27,10 @@ class Run(object):
 
     def delete(self):
         """Deletes run data on server."""
-        pass
+        url = API_URL+'/wrf/'+self.id
+        headers = {'Authorization':'Bearer '+self.token}
+        r = requests.delete(url,headers=headers)
+        self._update(r.json())
 
     def get(self):
         """Refreshes the run data from the server."""
