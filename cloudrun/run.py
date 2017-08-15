@@ -25,7 +25,10 @@ class Run(object):
 
     def get(self):
         """Refreshes the run data from the server."""
-        pass
+        headers = {'Authorization':'Bearer '+self.token}
+        url = API_URL+'/wrf/'+self.id
+        r = requests.get(url,headers=headers)
+        self.__dict__ = r.json()
 
     def upload(self,filename=None,url=None):
         """Upload a local or remote file."""
@@ -33,8 +36,8 @@ class Run(object):
 
     def start(self):
         """Starts the run."""
-        pass
+        url = API_URL+'/wrf/'+self.id+'/start'
 
     def stop(self):
         """Stops the run."""
-        pass
+        self.url = API_URL+'/wrf/'+self.id+'/stop'
