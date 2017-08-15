@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='cloudrun-python',
+    name='cloudrun',
     version='0.1.0',
     description='Python interface to Cloudrun API',
     author='Cloudrun Inc.',
