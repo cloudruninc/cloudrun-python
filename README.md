@@ -33,7 +33,7 @@ run.start(cores=32)
 run.get()
 ```
 
-[Contact us](accounts@cloudrun.co) to obtain an API token.
+[Contact us](mailto:accounts@cloudrun.co) to obtain an API token.
 
 ## Documentation
 
