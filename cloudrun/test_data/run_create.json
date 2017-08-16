@@ -1,0 +1,17 @@
+{
+  "id": "c24470f944d8477fac4938c34143cc3c",
+  "input_files": [],
+  "model": {
+    "name": "wrf",
+    "version": "3.9"
+  },
+  "output_files": [],
+  "output_size": 0,
+  "percent_complete": null,
+  "remaining_time": null,
+  "required_input_files": [],
+  "status": "created",
+  "time_created": "2017-08-16T12:53:31",
+  "time_started": null,
+  "time_stopped": null
+}
