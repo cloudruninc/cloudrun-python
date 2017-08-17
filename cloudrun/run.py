@@ -61,10 +61,12 @@ class Run(object):
         url = API_URL+'/wrf/'+self.id+'/setup'
         r = requests.post(url,headers=headers)
 
-    def start(self):
-        """Starts the run."""
+    def start(self,cores):
+        """Starts the run with a specified number of cores."""
         headers = {'Authorization':'Bearer '+self.token}
+        data = {'cores':cores}
         url = API_URL+'/wrf/'+self.id+'/start'
+        r = requests.post(url,headers=headers,data=data)
 
     def stop(self):
         """Stops the run."""
