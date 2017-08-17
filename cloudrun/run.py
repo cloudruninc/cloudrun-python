@@ -130,4 +130,3 @@ def upload_callback(encoder):
 
 def upload_callback_nobar(encoder):
     pass
-
