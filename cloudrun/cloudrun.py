@@ -11,7 +11,7 @@ class Cloudrun(object):
 
     def create_run(self,model,version):
         """Creates a new Run instance."""
-        run = Run(token)
+        run = Run(self.token)
         run.create(model,version)
         return run
 
