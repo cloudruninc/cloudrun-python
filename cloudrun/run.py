@@ -86,7 +86,7 @@ class Run(object):
 
     def _update(self,response):
         """Updates Run attributes from response dict."""
-        keys = ['status','input_files','output_files']
+        keys = ['id','status','input_files','output_files']
         for key in keys:
             setattr(self,key,response[key])
         self.time_created = datetime.datetime.strptime(response['time_created'],
