@@ -19,7 +19,7 @@ class Run(object):
             self.get()
 
     def create(self,model,version):
-        """Create a model run."""
+        """Creates a model run."""
         url = API_URL+'/wrf'
         headers = {'Authorization':'Bearer '+self.token}
         data = {'version':version}
@@ -53,13 +53,21 @@ class Run(object):
             raise ValueError('Missing keyword argument, either filename or url required')
 
         headers = {'Authorization':'Bearer '+self.token}
-            
+
+        if filename:
+            _url = API_URL+'/wrf/'+self.id+'/upload'
+        elif url:
+            _url = API_URL+'/wrf/'+self.id+'/upload_url'
+     
+        r = requests.post(_url,headers=headers)
+        self._update(r.json())
 
     def setup(self):
         """Set up the run Returns compute options."""
         headers = {'Authorization':'Bearer '+self.token}
         url = API_URL+'/wrf/'+self.id+'/setup'
         r = requests.post(url,headers=headers)
+        self._update(r.json())
 
     def start(self,cores):
         """Starts the run with a specified number of cores."""
@@ -67,12 +75,14 @@ class Run(object):
         data = {'cores':cores}
         url = API_URL+'/wrf/'+self.id+'/start'
         r = requests.post(url,headers=headers,data=data)
+        self._update(r.json())
 
     def stop(self):
         """Stops the run."""
         headers = {'Authorization':'Bearer '+self.token}
         url = API_URL+'/wrf/'+self.id+'/stop'
         r = requests.post(url,headers=headers)
+        self._update(r.json())
 
     def _update(self,response):
         """Updates Run attributes from response dict."""
