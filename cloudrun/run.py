@@ -3,6 +3,8 @@ run.py
 """
 import datetime
 import requests
+import requests_toolbelt
+import sys
 
 API_BASE_URL = 'https://api.cloudrun.co'
 API_VERSION = 'v1'
@@ -43,25 +45,6 @@ class Run(object):
         else:
             raise ValueError('Server responded with '+str(r.status_code))
 
-    def upload(self,filename=None,url=None):
-        """Upload a local or remote file."""
-
-        if filename and url:
-            raise ValueError('Ambiguous call, both filename and url provided')
-
-        if not filename or url:
-            raise ValueError('Missing keyword argument, either filename or url required')
-
-        headers = {'Authorization':'Bearer '+self.token}
-
-        if filename:
-            _url = API_URL+'/wrf/'+self.id+'/upload'
-        elif url:
-            _url = API_URL+'/wrf/'+self.id+'/upload_url'
-     
-        r = requests.post(_url,headers=headers)
-        self._update(r.json())
-
     def setup(self):
         """Set up the run Returns compute options."""
         headers = {'Authorization':'Bearer '+self.token}
@@ -84,9 +67,43 @@ class Run(object):
         r = requests.post(url,headers=headers)
         self._update(r.json())
 
+
+    def upload(self,filename=None,url=None,progress=True):
+        """Upload a local or remote file."""
+
+        if filename and url:
+            raise ValueError('Ambiguous call, both filename and url provided')
+
+        if not filename or url:
+            raise ValueError('Missing keyword argument, either filename or url required')
+
+        if filename:
+            _url = API_URL+'/wrf/'+self.id+'/upload'
+        elif url:
+            _url = API_URL+'/wrf/'+self.id+'/upload_url'
+ 
+        encoder = requests_toolbelt.MultipartEncoder(\
+            fields={'file':(filename,open(filename,'rb'),'application/octet-stream')})
+
+        if not progress:
+            monitor = requests_toolbelt.MultipartEncoderMonitor(encoder,upload_callback_nobar)
+        else:
+            monitor = requests_toolbelt.MultipartEncoderMonitor(encoder,upload_callback)
+
+        headers = {'Authorization':'Bearer '+self.token,\
+                   'Origin':'cloudrun.co',\
+                   'Content-Type': monitor.content_type}
+
+        r = requests.post(_url,headers=headers,data=monitor)
+
+        if r.status_code == 200:
+            self.get()
+        else:
+            raise ValueError('Server responded with '+str(r.status_code))
+
     def _update(self,response):
         """Updates Run attributes from response dict."""
-        keys = ['status','input_files','output_files']
+        keys = ['id','status','input_files','output_files']
         for key in keys:
             setattr(self,key,response[key])
         self.time_created = datetime.datetime.strptime(response['time_created'],
@@ -100,3 +117,16 @@ class Run(object):
             return '<Run '+self.model+'-'+self.version+' '+self.id[-6:]+' '+self.status+'>'
         else:
             return '<Run '+self.id[-6:]+' '+self.status+'>'
+    
+
+def upload_callback(encoder):
+    """Upload progress bar."""
+    bar_length = 50
+    fraction = encoder.bytes_read / encoder.len
+    bar_full = int(fraction * bar_length) * '#'
+    bar_empty = (bar_length - int(fraction * bar_length)) * '-'
+    sys.stdout.write('\r Uploading: ['+bar_full+bar_empty+'] '+'%d' % (fraction * 100) + '%')
+    sys.stdout.flush()
+
+def upload_callback_nobar(encoder):
+    pass
