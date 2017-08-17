@@ -12,5 +12,5 @@ api = Cloudrun(token)
 # Create a new WRF run instance
 run = api.create_run(model='wrf',version='3.9')
 
-
+run.upload('namelist.input')
 

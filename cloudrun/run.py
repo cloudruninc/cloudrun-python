@@ -43,25 +43,6 @@ class Run(object):
         else:
             raise ValueError('Server responded with '+str(r.status_code))
 
-    def upload(self,filename=None,url=None):
-        """Upload a local or remote file."""
-
-        if filename and url:
-            raise ValueError('Ambiguous call, both filename and url provided')
-
-        if not filename or url:
-            raise ValueError('Missing keyword argument, either filename or url required')
-
-        headers = {'Authorization':'Bearer '+self.token}
-
-        if filename:
-            _url = API_URL+'/wrf/'+self.id+'/upload'
-        elif url:
-            _url = API_URL+'/wrf/'+self.id+'/upload_url'
-     
-        r = requests.post(_url,headers=headers)
-        self._update(r.json())
-
     def setup(self):
         """Set up the run Returns compute options."""
         headers = {'Authorization':'Bearer '+self.token}
@@ -82,6 +63,27 @@ class Run(object):
         headers = {'Authorization':'Bearer '+self.token}
         url = API_URL+'/wrf/'+self.id+'/stop'
         r = requests.post(url,headers=headers)
+        self._update(r.json())
+
+    def upload(self,filename=None,url=None):
+        """Upload a local or remote file."""
+
+        if filename and url:
+            raise ValueError('Ambiguous call, both filename and url provided')
+
+        if not filename or url:
+            raise ValueError('Missing keyword argument, either filename or url required')
+
+        headers = {'Authorization':'Bearer '+self.token,'Origin':'cloudrun.co'}
+
+        if filename:
+            _url = API_URL+'/wrf/'+self.id+'/upload'
+        elif url:
+            _url = API_URL+'/wrf/'+self.id+'/upload_url'
+    
+        files = {'file':open(filename,'rb')}
+ 
+        r = requests.post(_url,headers=headers,files=files)
         self._update(r.json())
 
     def _update(self,response):
