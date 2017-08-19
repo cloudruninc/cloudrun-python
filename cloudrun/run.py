@@ -50,7 +50,7 @@ class Run(object):
         headers = {'Authorization':'Bearer '+self.token}
         url = API_URL+'/wrf/'+self.id+'/setup'
         r = requests.post(url,headers=headers)
-        self._update(r.json())
+        return r.json()
 
     def start(self,cores):
         """Starts the run with a specified number of cores."""
