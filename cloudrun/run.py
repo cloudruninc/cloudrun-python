@@ -50,7 +50,12 @@ class Run(object):
         headers = {'Authorization':'Bearer '+self.token}
         url = API_URL+'/wrf/'+self.id+'/setup'
         r = requests.post(url,headers=headers)
-        return r.json()
+        if r.status_code == 200:
+            resp = r.json()
+            self.compute_options = resp['compute_options']
+            self.required_input_files = resp['required_input_files']
+        else:
+            raise ValueError('Server responded with '+str(r.status_code))
 
     def start(self,cores):
         """Starts the run with a specified number of cores."""
