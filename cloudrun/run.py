@@ -2,6 +2,7 @@
 run.py
 """
 import datetime
+import os
 import requests
 import requests_toolbelt
 import sys
@@ -87,8 +88,10 @@ class Run(object):
         elif url:
             _url = API_URL+'/wrf/'+self.id+'/upload_url'
  
-        encoder = requests_toolbelt.MultipartEncoder(\
-            fields={'file':(filename,open(filename,'rb'),'application/octet-stream')})
+        file_multipart = {'file':(os.path.basename(filename),open(filename,'rb'),\
+                          'application/octet-stream')}
+
+        encoder = requests_toolbelt.MultipartEncoder(fields=file_multipart)
 
         if not progress:
             monitor = requests_toolbelt.MultipartEncoderMonitor(encoder,upload_callback_nobar)
@@ -100,6 +103,13 @@ class Run(object):
                    'Content-Type': monitor.content_type}
 
         r = requests.post(_url,headers=headers,data=monitor)
+
+        if progress:
+            sys.stdout.write('\n')
+            sys.stdout.flush()
+
+        if os.path.basename(filename) == 'namelist.input':
+            self.setup()
 
         if r.status_code == 200:
             self.get()
