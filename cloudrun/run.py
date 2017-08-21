@@ -27,6 +27,7 @@ class Run(object):
         headers = {'Authorization':'Bearer '+self.token}
         data = {'version':version}
         r = requests.post(url,headers=headers,data=data)
+        self._set_rate_limit(r)
         self._update(r.json())
 
     def delete(self):
@@ -34,6 +35,7 @@ class Run(object):
         url = API_URL+'/wrf/'+self.id
         headers = {'Authorization':'Bearer '+self.token}
         r = requests.delete(url,headers=headers)
+        self._set_rate_limit(r)
         self._update(r.json())
 
     def get(self):
@@ -41,6 +43,7 @@ class Run(object):
         headers = {'Authorization':'Bearer '+self.token}
         url = API_URL+'/wrf/'+self.id
         r = requests.get(url,headers=headers)
+        self._set_rate_limit(r)
         if r.status_code == 200:
             self._update(r.json())
         else:
@@ -51,6 +54,7 @@ class Run(object):
         headers = {'Authorization':'Bearer '+self.token}
         url = API_URL+'/wrf/'+self.id+'/setup'
         r = requests.post(url,headers=headers)
+        self._set_rate_limit(r)
         if r.status_code == 200:
             resp = r.json()
             self.compute_options = resp['compute_options']
@@ -64,6 +68,7 @@ class Run(object):
         data = {'cores':cores}
         url = API_URL+'/wrf/'+self.id+'/start'
         r = requests.post(url,headers=headers,data=data)
+        self._set_rate_limit(r)
         self._update(r.json())
 
     def stop(self):
@@ -71,6 +76,7 @@ class Run(object):
         headers = {'Authorization':'Bearer '+self.token}
         url = API_URL+'/wrf/'+self.id+'/stop'
         r = requests.post(url,headers=headers)
+        self._set_rate_limit(r)
         self._update(r.json())
 
 
@@ -115,6 +121,13 @@ class Run(object):
             self.get()
         else:
             raise ValueError('Server responded with '+str(r.status_code))
+
+    def _set_rate_limit(self,response):
+        """Sets the number of requests and time 
+        to reset from response headers."""
+        self._requests_limit = int(response.headers['requests_limit'])
+        self._requests_remaining = int(response.headers['requests_remaining'])
+        self._time_to_reset = int(response.headers['time_to_reset'])
 
     def _update(self,response):
         """Updates Run attributes from response dict."""
