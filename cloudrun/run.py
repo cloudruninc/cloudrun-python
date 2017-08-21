@@ -29,6 +29,7 @@ class Run(object):
         r = requests.post(url,headers=headers,data=data)
         self._set_rate_limit(r)
         self._update(r.json())
+        self._catch_error()
 
     def delete(self):
         """Deletes run data on server."""
@@ -37,6 +38,7 @@ class Run(object):
         r = requests.delete(url,headers=headers)
         self._set_rate_limit(r)
         self._update(r.json())
+        self._catch_error()
 
     def get(self):
         """Refreshes the run data from the server."""
@@ -44,6 +46,7 @@ class Run(object):
         url = API_URL+'/wrf/'+self.id
         r = requests.get(url,headers=headers)
         self._set_rate_limit(r)
+        self._catch_error()
         if r.status_code == 200:
             self._update(r.json())
         else:
@@ -55,6 +58,7 @@ class Run(object):
         url = API_URL+'/wrf/'+self.id+'/setup'
         r = requests.post(url,headers=headers)
         self._set_rate_limit(r)
+        self._catch_error()
         if r.status_code == 200:
             resp = r.json()
             self.compute_options = resp['compute_options']
@@ -70,6 +74,7 @@ class Run(object):
         r = requests.post(url,headers=headers,data=data)
         self._set_rate_limit(r)
         self._update(r.json())
+        self._catch_error()
 
     def stop(self):
         """Stops the run."""
@@ -78,7 +83,7 @@ class Run(object):
         r = requests.post(url,headers=headers)
         self._set_rate_limit(r)
         self._update(r.json())
-
+        self._catch_error()
 
     def upload(self,filename=None,url=None,progress=True):
         """Upload a local or remote file."""
@@ -121,6 +126,11 @@ class Run(object):
             self.get()
         else:
             raise ValueError('Server responded with '+str(r.status_code))
+
+    def _catch_error(self):
+        """Catches and raises an error."""
+        if self.status == 'error':
+            raise RuntimeError(self.error['message'])
 
     def _set_rate_limit(self,response):
         """Sets the number of requests and time 
