@@ -1,7 +1,8 @@
 """
 run.py
 """
-import datetime
+from datetime import datetime,timedelta
+import numpy as np
 import os
 import requests
 import requests_toolbelt
@@ -12,7 +13,7 @@ API_VERSION = 'v1'
 API_URL = API_BASE_URL+'/'+API_VERSION
 
 class Run(object):
-    """Class to handle all model run metadata 
+    """Class to handle all model run metadata
     and provide access to model output."""
     def __init__(self,token,id=None):
         """Run constructor."""
@@ -46,9 +47,39 @@ class Run(object):
         url = API_URL+'/wrf/'+self.id
         r = requests.get(url,headers=headers)
         self._set_rate_limit(r)
-        self._catch_error()
         if r.status_code == 200:
             self._update(r.json())
+        else:
+            raise ValueError('Server responded with '+str(r.status_code))
+        self._catch_error()
+
+    def read_output(self,field,time1=None,time2=None,
+        lon1=None,lat1=None,lon2=None,lat2=None):
+        """Slices the model output field."""
+        headers = {'Authorization':'Bearer '+self.token}
+        url = API_URL+'/wrf/'+self.id+'/fields/'+field
+        data = {}
+        if time1:
+            data['time1'] = time1.strftime('%Y-%m-%d_%H:%M:%S')
+        if time2:
+            data['time2'] = time2.strftime('%Y-%m-%d_%H:%M:%S')
+        if lon1:
+            data['lon1'] = lon1
+        if lat1:
+            data['lat1'] = lat1
+        if lon2:
+            data['lon2'] = lon2
+        if lat2:
+            data['lat2'] = lat2
+        r = requests.get(url,headers=headers,data=data)
+        self._set_rate_limit(r)
+        if r.status_code == 200:
+            resp = r.json()
+            field_atts = resp[field.upper()]
+            time = np.array([datetime.strptime(t,'%Y-%m-%d_%H:%M:%S')\
+                             for t in resp['times']])
+            data = np.array(resp['data'])
+            return field_atts,time,data
         else:
             raise ValueError('Server responded with '+str(r.status_code))
 
@@ -98,7 +129,7 @@ class Run(object):
             _url = API_URL+'/wrf/'+self.id+'/upload'
         elif url:
             _url = API_URL+'/wrf/'+self.id+'/upload_url'
- 
+
         file_multipart = {'file':(os.path.basename(filename),open(filename,'rb'),\
                           'application/octet-stream')}
 
@@ -133,7 +164,7 @@ class Run(object):
             raise RuntimeError(self.error['message'])
 
     def _set_rate_limit(self,response):
-        """Sets the number of requests and time 
+        """Sets the number of requests and time
         to reset from response headers."""
         self._requests_limit = int(response.headers['requests_limit'])
         self._requests_remaining = int(response.headers['requests_remaining'])
@@ -145,18 +176,19 @@ class Run(object):
             'output_files','percent_complete','remaining_time']
         for key in keys:
             setattr(self,key,response[key])
-        self.time_created = datetime.datetime.strptime(response['time_created'],
-            '%Y-%m-%dT%H:%M:%S')
+        self.time_created = datetime.strptime(response['time_created'],
+            '%Y-%m-%d_%H:%M:%S')
         self.model = response['model']['name']
         self.version = response['model']['version']
 
     def __repr__(self):
         """Overloads the default __repr__ method."""
         if self.model and self.version:
-            return '<Run '+self.model+'-'+self.version+' '+self.id[-6:]+' '+self.status+'>'
+            return '<Run '+self.model+'-'+self.version\
+                   +' '+self.id[-6:]+' '+self.status+'>'
         else:
             return '<Run '+self.id[-6:]+' '+self.status+'>'
-    
+
 
 def upload_callback(encoder):
     """Upload progress bar."""
@@ -168,4 +200,5 @@ def upload_callback(encoder):
     sys.stdout.flush()
 
 def upload_callback_nobar(encoder):
+    """Helper function to disable progress bar."""
     pass
