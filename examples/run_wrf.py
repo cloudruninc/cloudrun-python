@@ -14,7 +14,6 @@ run = api.create_run(model='wrf',version='3.9')
 
 # Upload input files
 for input_file in ['namelist.input','wrfinput_d01','wrfbdy_d01']:
-    print(input_file)
     run.upload(input_file)
 
 # Start the run using 4 parallel cores
