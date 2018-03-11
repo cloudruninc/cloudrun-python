@@ -48,5 +48,5 @@ class Api():
             'Origin': 'cloudrun.co'}
         url = self.url + '/runs/' + runid + '/input'
         files = {'file': open(filename, 'rb')}
-        r = requests.post(url, headers=self.headers, files=files)
+        r = requests.post(url, headers=headers, files=files)
         return r.status_code, r.json()
