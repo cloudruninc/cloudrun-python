@@ -8,7 +8,9 @@ Official Python interface to [Cloudrun API](http://docs.cloudrun.co).
 ## Installation
 
 ```
-pip install git+https://github.com/cloudruninc/cloudrun-python
+git clone https://github.com/cloudruninc/cloudrun-python
+cd cloudrun-python
+pip install -U .
 ```
 
 ## Example usage
@@ -26,10 +28,10 @@ token = os.environ['CLOUDRUN_API_TOKEN']
 api = Cloudrun(token)
 
 # Create a new WRF run instance
-run = api.create_run(model='wrf',version='3.9')
+run = api.create_run(model='wrf', version='3.9')
 
 # Upload input files
-for input_file in ['namelist.input','wrfinput_d01','wrfbdy_d01']:
+for input_file in ['namelist.input', 'wrfinput_d01', 'wrfbdy_d01']:
     run.upload(input_file)
 
 # Start the run using 4 parallel cores
@@ -54,7 +56,7 @@ api = Cloudrun(token)
 run = api.get_run('ead622aa054040d39c8fd741d19993f0')
 
 # Read 10-m u wind on 2016-12-25 12:00 UTC
-field,time,u10 = run.read_output('u10',time1=datetime(2016,12,25,12))
+field, time, u10 = run.read_output('u10', time1=datetime(2016, 12, 25, 12))
 ```
 
 [Contact us](mailto:accounts@cloudrun.co) to obtain an API token.
