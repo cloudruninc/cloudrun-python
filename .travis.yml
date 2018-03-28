@@ -4,5 +4,5 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-install: "pip install -U -r requirements.txt"
+install: "pip install -U ."
 script: pytest -v cloudrun/tests.py
