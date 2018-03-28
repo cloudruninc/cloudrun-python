@@ -8,7 +8,7 @@ setup(
     author_email='hello@cloudrun.co',
     url='https://github.com/cloudruninc/cloudrun-python',
     packages=['cloudrun'],
-    install_requires=['pytest', 'requests', 'requests-toolbelt', 'responses'],
+    install_requires=['numpy', 'pytest', 'requests', 'requests-toolbelt', 'responses'],
     test_suite='cloudrun.tests',
     license='MIT'
 )
