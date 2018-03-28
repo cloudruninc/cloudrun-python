@@ -1,4 +1,0 @@
-pytest
-requests
-requests_toolbelt
-responses
