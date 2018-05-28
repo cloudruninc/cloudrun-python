@@ -13,6 +13,12 @@ cd cloudrun-python
 pip install -U .
 ```
 
+To run tests:
+
+```
+pytest -v cloudrun/tests.py
+```
+
 ## Example usage
 
 ### Creating and starting a WRF run
