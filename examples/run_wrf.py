@@ -10,10 +10,10 @@ token = os.environ['CLOUDRUN_API_TOKEN']
 api = Cloudrun(token)
 
 # Create a new WRF run instance
-run = api.create_run(model='wrf',version='3.9')
+run = api.create_run(model='wrf', version='3.9')
 
 # Upload input files
-for input_file in ['namelist.input','wrfinput_d01','wrfbdy_d01']:
+for input_file in ['namelist.input', 'wrfinput_d01', 'wrfbdy_d01']:
     run.upload(input_file)
 
 # Start the run using 4 parallel cores
