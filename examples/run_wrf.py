@@ -1,20 +1,20 @@
 #/usr/bin/env python
 
-from cloudrun import Cloudrun
+from cloudrun.run import Run
 import os
 
 # Secret token
 token = os.environ['CLOUDRUN_API_TOKEN']
 
-# Create API session instance
-api = Cloudrun(token)
+userid = '8d3eee40-1700-11e7-9970-f584c576605b'
+url = 'https://api.cloudrun.co/v1'
 
-# Create a new WRF run instance
-run = api.create_run(model='wrf', version='3.9')
+run = Run(url, token + '|' + userid)
+run.create(model='wrf', version='3.9.1')
 
 # Upload input files
 for input_file in ['namelist.input', 'wrfinput_d01', 'wrfbdy_d01']:
     run.upload(input_file)
 
 # Start the run using 4 parallel cores
-run.start(cores=4)
+#run.start(cores=4)
