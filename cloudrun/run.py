@@ -166,9 +166,11 @@ class Run(object):
     def _set_rate_limit(self, response):
         """Sets the number of requests and time
         to reset from response headers."""
-        self._requests_limit = int(response.headers['requests_limit'])
-        self._requests_remaining = int(response.headers['requests_remaining'])
-        self._time_to_reset = int(response.headers['time_to_reset'])
+        # TODO: enable requests throttling when we 
+        # settle on auth levels.
+        #self._requests_limit = int(response.headers['requests_limit'])
+        #self._requests_remaining = int(response.headers['requests_remaining'])
+        #self._time_to_reset = int(response.headers['time_to_reset'])
 
     def _update(self, response):
         """Updates Run attributes from response dict."""
