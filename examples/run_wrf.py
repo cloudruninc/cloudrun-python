@@ -1,6 +1,6 @@
 #/usr/bin/env python
 
-from cloudrun.run import Run
+from cloudrun import Run
 import os
 
 # Secret token
