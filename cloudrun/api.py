@@ -42,6 +42,13 @@ class Api():
         r = requests.get(url, headers=headers, json=json_patch)
         return r.status_code, r.json()
 
+    def start_run(self, runid):
+        """Starts a run."""
+        url = self.url + '/runs/' + runid + '/start'
+        headers = {'Authorization': 'Bearer ' + self.token}
+        r = requests.post(url, headers=headers)
+        return r.status_code, r.json()
+
     def upload_file(self, runid, filename):
         """Uploads a file to a run."""
         headers = {'Authorization': 'Bearer ' + self.token,

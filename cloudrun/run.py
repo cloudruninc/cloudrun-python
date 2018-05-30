@@ -77,13 +77,10 @@ class Run(object):
 
     def start(self, cores):
         """Starts the run with a specified number of cores."""
-        headers = {'Authorization': 'Bearer ' + self.token}
-        data = {'cores':cores}
-        url = API_URL + '/wrf/' + self.id + '/start'
-        r = requests.post(url, headers=headers, data=data)
-        self._set_rate_limit(r)
-        self._update(r.json())
-        self._catch_error()
+        #TODO select compute option here
+        status, body = self.api.start_run(self.id)
+        self._update(body)
+        #self._catch_error()
 
     def stop(self):
         """Stops the run."""
