@@ -160,11 +160,15 @@ class Run(object):
         self.time_created = datetime.strptime(response['time_created'], 
                                               '%Y-%m-%dT%H:%M:%S.%fZ')
         if response['time_started']:
-            self.time_created = datetime.strptime(response['time_started'], 
+            self.time_started = datetime.strptime(response['time_started'], 
                                                   '%Y-%m-%dT%H:%M:%S.%fZ')
+        else:
+            self.time_started = None
         if response['time_stopped']:
             self.time_stopped = datetime.strptime(response['time_stopped'], 
                                                   '%Y-%m-%dT%H:%M:%S.%fZ')
+        else:
+            self.time_stopped = None
 
     def __repr__(self):
         """Overloads the default __repr__ method."""
