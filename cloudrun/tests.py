@@ -2,7 +2,7 @@ import datetime
 import json
 import responses
 import uuid
-from .run import Run
+from cloudrun import Run
 
 url = 'https://api.cloudrun.co/v1'
 token = uuid.uuid4().hex
