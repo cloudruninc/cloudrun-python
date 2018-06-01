@@ -16,4 +16,4 @@ for input_file in ['namelist.input', 'wrfinput_d01', 'wrfbdy_d01']:
     run.upload(input_file)
 
 # Start the run using 4 parallel cores
-#run.start(cores=4)
+run.start(cores=4)

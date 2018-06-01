@@ -39,7 +39,7 @@ class Api():
         """Applies a JSON patch to a run."""
         url = self.url + '/runs/' + runid
         headers = {'Authorization': 'Bearer ' + self.token}
-        r = requests.get(url, headers=headers, json=json_patch)
+        r = requests.patch(url, headers=headers, json=json_patch)
         return r.status_code, r.json()
 
     def start_run(self, runid):

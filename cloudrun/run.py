@@ -75,9 +75,32 @@ class Run(object):
         else:
             raise ValueError('Server responded with ' + str(r.status_code))
 
-    def start(self, cores):
-        """Starts the run with a specified number of cores."""
-        #TODO select compute option here
+    def start(self, cores=None, compute_option_id=None):
+        """Starts the run with a specified number of cores 
+        or specific compute_option_id."""
+        assert not (cores and compute_option_id),\
+            'Ambiguous call; pass either cores or compute_option_id'
+        assert cores or compute_option_id,\
+            'Insufficient args; either cores or compute_option_id must be provided'
+
+        available_cores = [opt['cores'] for opt in self.compute_options]
+        available_ids = [opt['compute_option_id'] for opt in self.compute_options]
+
+        if compute_option_id:
+            if not compute_option_id in available_ids:
+                raise RuntimeError('Invalid compute_option_id')
+        else:
+            if not cores in available_cores:
+                raise RuntimeError('This number of cores is not available')
+            compute_option_id = available_ids[available_cores.index(cores)]
+
+        patch = [{
+            "op": "replace",
+            "path": "/selected_compute_option",
+            "value": {"compute_option_id": compute_option_id}
+        }]
+
+        status, body = self.api.patch_run(self.id, patch)
         status, body = self.api.start_run(self.id)
         self._update(body)
         #self._catch_error()
