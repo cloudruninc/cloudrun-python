@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from cloudrun.api import Api
+from cloudrun import Api
 from datetime import datetime, timedelta
 import os
 

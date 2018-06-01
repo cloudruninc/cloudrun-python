@@ -1,18 +1,20 @@
 {
+  "compute_config": {},
+  "compute_options": [],
+  "disk_usage": 0,
   "error": null,
-  "id": "c24470f944d8477fac4938c34143cc3c",
+  "id": "5c6b0737-af4e-4168-b9b7-46e5f25e0e1a",
   "input_files": [],
-  "model": {
-    "name": "wrf",
-    "version": "3.9"
-  },
+  "model": "wrf",
   "output_files": [],
-  "output_size": 0,
-  "percent_complete": null,
+  "percent_complete": 0.0,
   "remaining_time": null,
-  "required_input_files": [],
+  "required_input_files": ["namelist.input"],
+  "run_name": null,
+  "selected_compute_option": {},
   "status": "created",
-  "time_created": "2017-08-16_12:53:31",
+  "time_created": "2018-05-30T16:55:03.605352Z",
   "time_started": null,
-  "time_stopped": null
+  "time_stopped": null,
+  "version": "3.9.1"
 }

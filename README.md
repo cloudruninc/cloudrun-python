@@ -24,45 +24,22 @@ pytest -v cloudrun/tests.py
 ### Creating and starting a WRF run
 
 ```python
-from cloudrun import Cloudrun
+from cloudrun import Run
 import os
 
 # Secret token
 token = os.environ['CLOUDRUN_API_TOKEN']
+url = 'https://api.cloudrun.co/v1'
 
-# Create API session instance
-api = Cloudrun(token)
-
-# Create a new WRF run instance
-run = api.create_run(model='wrf', version='3.9')
+run = Run(url, token)
+run.create('wrf', '3.9.1')
 
 # Upload input files
 for input_file in ['namelist.input', 'wrfinput_d01', 'wrfbdy_d01']:
     run.upload(input_file)
 
 # Start the run using 4 parallel cores
-run.start(cores=4) 
-```
-
-### Reading WRF output
-
-```python
-from cloudrun import Cloudrun
-from datetime import datetime
-import numpy as np
-import os
-
-# Secret token
-token = os.environ['CLOUDRUN_API_TOKEN']
-
-# Create API session instance
-api = Cloudrun(token)
-
-# Access an existing WRF run
-run = api.get_run('ead622aa054040d39c8fd741d19993f0')
-
-# Read 10-m u wind on 2016-12-25 12:00 UTC
-field, time, u10 = run.read_output('u10', time1=datetime(2016, 12, 25, 12))
+run.start(cores=4)
 ```
 
 [Contact us](mailto:accounts@cloudrun.co) to obtain an API token.
