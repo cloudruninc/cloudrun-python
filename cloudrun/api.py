@@ -3,15 +3,18 @@ api.py
 """
 import requests
 
-class Api():
+
+class Api:
     """First layer above HTTP API requests."""
     
     def __init__(self, url, token, debug=False, timer=False):
         """Returns a new Cloudrun session."""
-        self.url = url
+        self.url = self._cleanse_url(url)
         self.token = token
         self.debug = debug
         self.timer = timer
+
+        self.headers = {'Authorization': 'Bearer ' + self.token}
 
     def create_run(self, model, version):
         """Creates a new run."""
@@ -57,3 +60,25 @@ class Api():
         files = {'file': open(filename, 'rb')}
         r = requests.post(url, headers=headers, files=files)
         return r.status_code, r.json()
+
+    def get_forecasts_due_to_run(self):
+        return self._get('/runs/forecasts-due-to-run')
+
+    def _get(self, path):
+        full_url = self.url + '/' + self._cleanse_path(path)
+        response = requests.get(full_url, headers=self.headers)
+        return response.status_code, response.json()
+
+    def _cleanse_url(self, url):
+        # strip trailing slash from url
+        if url.endswith('/'):
+            return url[:-1]
+        else:
+            return url
+
+    def _cleanse_path(self, path):
+        # strip leading slash from path
+        if path.startswith('/'):
+            return path[1:]
+        else:
+            return path
