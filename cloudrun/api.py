@@ -61,6 +61,9 @@ class Api:
         r = requests.post(url, headers=headers, files=files)
         return r.status_code, r.json()
 
+    def get_forecast(self, forecast_id):
+        return self._get('/runs/forecasts/' + forecast_id)
+
     def get_forecasts_due_to_run(self):
         return self._get('/runs/forecasts-due-to-run')
 
