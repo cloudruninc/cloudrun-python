@@ -9,7 +9,7 @@ class Api:
     
     def __init__(self, url, token, debug=False, timer=False):
         """Returns a new Cloudrun session."""
-        self.base_url = self._cleanse_url(url)
+        self.base_url = url.rstrip('/')
         self.token = token
         self.debug = debug
         self.timer = timer
@@ -73,6 +73,9 @@ class Api:
     def patch_forecast(self, forecast_id, json_patch):
         return self._patch('/runs/forecasts/' + forecast_id, json_patch)
 
+    def get_region(self, region_id):
+        return self._get('/regions/' + region_id)
+
     def _get(self, path):
         return self._send_request('get', path)
 
@@ -83,21 +86,7 @@ class Api:
         return self._send_request('patch', path, json)
 
     def _send_request(self, verb, path, json=None):
-        full_url = self.base_url + '/' + self._cleanse_path(path)
+        full_url = self.base_url + '/' + path.lstrip('/')
         request_method = getattr(requests, verb)
         response = request_method(full_url, headers=self.headers, json=json)
         return response.status_code, response.json()
-
-    def _cleanse_url(self, url):
-        # strip trailing slash from url
-        if url.endswith('/'):
-            return url[:-1]
-        else:
-            return url
-
-    def _cleanse_path(self, path):
-        # strip leading slash from path
-        if path.startswith('/'):
-            return path[1:]
-        else:
-            return path
