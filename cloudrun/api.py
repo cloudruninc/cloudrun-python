@@ -70,16 +70,22 @@ class Api:
     def start_forecast_run(self, forecast_id):
         return self._post('/runs/run-forecast/' + forecast_id)
 
+    def patch_forecast(self, forecast_id, json_patch):
+        return self._patch('/runs/forecasts/' + forecast_id, json_patch)
+
     def _get(self, path):
         return self._send_request('get', path)
 
     def _post(self, path):
         return self._send_request('post', path)
 
-    def _send_request(self, verb, path):
+    def _patch(self, path, json):
+        return self._send_request('patch', path, json)
+
+    def _send_request(self, verb, path, json=None):
         full_url = self.base_url + '/' + self._cleanse_path(path)
         request_method = getattr(requests, verb)
-        response = request_method(full_url, headers=self.headers)
+        response = request_method(full_url, headers=self.headers, json=json)
         return response.status_code, response.json()
 
     def _cleanse_url(self, url):

@@ -3,8 +3,7 @@ import os
 import json
 
 token = os.environ['CLOUDRUN_API_TOKEN']
-
-url = 'https://api.cloudrun.co/v1'
+url = os.environ.get('CLOUDRUN_API_URL') or 'https://api.cloudrun.co/v1'
 
 api = Api(url, token)
 
