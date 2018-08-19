@@ -48,8 +48,8 @@ class Run(object):
     def read_output(self, field, time1=None, time2=None, 
         lon1=None, lat1=None, lon2=None, lat2=None):
         """Slices the model output field."""
-        headers = {'Authorization': 'Bearer ' + self.token}
-        url = API_URL + '/wrf/' + self.id + '/fields/' + field
+        headers = {'Authorization': 'Bearer ' + self.api.token}
+        url = API_URL + '/runs/' + self.id + '/output/fields/' + field
         data = {}
         if time1:
             data['time1'] = time1.strftime('%Y-%m-%d_%H:%M:%S')
@@ -64,7 +64,7 @@ class Run(object):
         if lat2:
             data['lat2'] = lat2
         r = requests.get(url, headers=headers, data=data)
-        self._set_rate_limit(r)
+        #self._set_rate_limit(r)
         if r.status_code == 200:
             resp = r.json()
             field_atts = resp[field.upper()]
@@ -107,12 +107,12 @@ class Run(object):
 
     def stop(self):
         """Stops the run."""
-        headers = {'Authorization': 'Bearer ' + self.token}
-        url = API_URL + '/wrf/' + self.id + '/stop'
+        headers = {'Authorization': 'Bearer ' + self.api.token}
+        url = API_URL + '/runs/' + self.id + '/stop'
         r = requests.post(url, headers=headers)
-        self._set_rate_limit(r)
-        self._update(r.json())
-        self._catch_error()
+        #self._set_rate_limit(r)
+        #self._update(r.json())
+        #self._catch_error()
 
     def upload(self, filename=None, url=None, progress=True):
         """Upload a local or remote file."""
