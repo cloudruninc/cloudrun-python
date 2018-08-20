@@ -30,6 +30,9 @@ class Run(object):
     def create(self, model, version):
         """Creates a model run."""
         status, body = self.api.create_run(model, version)
+        #TODO check if valid token in constructor
+        if status == 403:
+            raise RuntimeError('403 -- Forbidden')
         self._update(body)
         #self._catch_error()
 
@@ -42,6 +45,9 @@ class Run(object):
     def get(self):
         """Refreshes the run data from the server."""
         status, body = self.api.get_run(self.id)
+        #TODO check if valid token in constructor
+        if status == 403:
+            raise RuntimeError('403 -- Forbidden')
         self._update(body)
         #self._catch_error()
 
