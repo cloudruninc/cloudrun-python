@@ -67,11 +67,14 @@ class Api:
     def get_forecasts_due_to_run(self):
         return self._get('/forecasts-due-to-run')
 
+    def patch_forecast(self, forecast_id, json_patch):
+        return self._patch('/forecasts/' + forecast_id, json_patch)
+
     def start_forecast_run(self, forecast_id):
         return self._post('/run-forecast/' + forecast_id)
 
-    def patch_forecast(self, forecast_id, json_patch):
-        return self._patch('/forecasts/' + forecast_id, json_patch)
+    def stop_forecast(self, forecast_id):
+        return self._post('/stop-forecast/' + forecast_id)
 
     def get_region(self, region_id):
         return self._get('/regions/' + region_id)
