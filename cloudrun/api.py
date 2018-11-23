@@ -62,21 +62,35 @@ class Api:
         return r.status_code, r.json()
 
     def get_forecast(self, forecast_id):
+        """Returns a forecast object."""
         return self._get('/forecasts/' + forecast_id)
 
     def get_forecasts_due_to_run(self):
+        """Returns all pending forecasts that are due to run."""
         return self._get('/forecasts-due-to-run')
 
     def patch_forecast(self, forecast_id, json_patch):
+        """Updates forecast attributes."""
         return self._patch('/forecasts/' + forecast_id, json_patch)
 
     def start_forecast_run(self, forecast_id):
+        """Starts the forecast that has been created."""
         return self._post('/run-forecast/' + forecast_id)
 
+    def complete_forecast(self, forecast_id):
+        """Stops the forecast and marks as complete (admin only)."""
+        return self._post('/complete-forecast/' + forecast_id)
+
+    def fail_forecast(self, forecast_id):
+        """Stops the forecast and marks with error status (admin only)."""
+        return self._post('/fail-forecast/' + forecast_id)
+
     def stop_forecast(self, forecast_id):
+        """Stops the forecast and marks as stopped."""
         return self._post('/stop-forecast/' + forecast_id)
 
     def get_region(self, region_id):
+        """Returns the region object."""
         return self._get('/regions/' + region_id)
 
     def _get(self, path):
