@@ -8,14 +8,14 @@ Official Python interface to [Cloudrun API](http://docs.cloudrun.co).
 ## Installation
 
 ```
-git clone https://github.com/cloudruninc/cloudrun-python
-cd cloudrun-python
-pip install -U .
+pip install git+https://github.com/cloudruninc/cloudrun-python
 ```
 
 To run tests:
 
 ```
+git clone https://github.com/cloudruninc/cloudrun-python
+cd cloudrun-python
 pytest -v cloudrun/tests.py
 ```
 
