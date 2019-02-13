@@ -134,6 +134,8 @@ class Run(object):
 
         encoder = requests_toolbelt.MultipartEncoder(fields=file_multipart)
 
+        print('Uploading ' + os.path.basename(filename))
+
         if not progress:
             monitor = requests_toolbelt.MultipartEncoderMonitor(
                 encoder, upload_callback_nobar)
@@ -212,7 +214,7 @@ def upload_callback(encoder):
     fraction = encoder.bytes_read / encoder.len
     bar_full = int(fraction * bar_length) * '#'
     bar_empty = (bar_length - int(fraction * bar_length)) * '-'
-    sys.stdout.write('\r Uploading: [' + bar_full + bar_empty + '] ' + '%d' % (fraction * 100) + '%')
+    sys.stdout.write('\r Progress: [' + bar_full + bar_empty + '] ' + '%d' % (fraction * 100) + '%')
     sys.stdout.flush()
 
 def upload_callback_nobar(encoder):
