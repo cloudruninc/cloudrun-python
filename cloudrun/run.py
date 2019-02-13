@@ -147,7 +147,7 @@ class Run(object):
             'Content-Type': monitor.content_type
         }
 
-        _url = self.api.url + '/runs/' + self.id + '/input'
+        _url = API_URL + '/runs/' + self.id + '/input'
 
         r = requests.post(_url, headers=headers, data=monitor)
 
